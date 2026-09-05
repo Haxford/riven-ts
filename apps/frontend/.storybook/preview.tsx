@@ -1,8 +1,7 @@
-// oxlint-disable-next-line import/no-unassigned-import
-import "msw-storybook-addon/types";
 import "@/lib/styles/themes/all.css";
 import "@/lib/styles/globals.css";
 import "@/lib/styles/app.css";
+import { i18n } from "@/.storybook/i18n";
 import { fontMono, fontSansSerif, fontSerif } from "@/app/fonts";
 import { Providers } from "@/components/providers";
 
@@ -17,6 +16,19 @@ import { setupWorker } from "msw/browser";
 import { useLayoutEffect } from "react";
 import { toast } from "sonner";
 import { themes } from "storybook/theming";
+
+import { WithI18n } from "./decorators/with-i18n";
+
+declare module "storybook/internal/csf" {
+  interface StoryContext {
+    parameters: {
+      i18n: typeof i18n;
+    };
+    globals: {
+      locale: string;
+    };
+  }
+}
 
 export const preview = definePreview({
   tags: ["autodocs"],
@@ -40,6 +52,7 @@ export const preview = definePreview({
     }),
   ],
   parameters: {
+    i18n,
     controls: {
       matchers: {
         color: /(background|color)$/iu,
@@ -67,7 +80,24 @@ export const preview = definePreview({
       },
     },
   },
+  globalTypes: {
+    locale: {
+      name: "Locale",
+      description: "Internationalization locale",
+      defaultValue: "en-GB",
+      toolbar: {
+        icon: "globe",
+        items: [
+          { value: "en-GB", title: "English (GB)" },
+          { value: "en-US", title: "English (US)" },
+          { value: "fr-FR", title: "Français" },
+          { value: "fa-IR", title: "فارسی" },
+        ],
+      },
+    },
+  },
   decorators: [
+    WithI18n,
     (Story) => {
       useLayoutEffect(() => {
         // Add the font variables to the html tag

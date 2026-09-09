@@ -1,19 +1,14 @@
-import { cn } from "@/lib/utils";
+import type { HTMLAttributes } from "react";
 
-export interface LogTabButtonProps {
+export interface LogTabButtonProps extends HTMLAttributes<HTMLButtonElement> {
   name: string;
-  isActive: boolean;
-  onclick: () => void;
 }
 
-export function LogTabButton({ name, isActive, onclick }: LogTabButtonProps) {
+export function LogTabButton({ name, onClick, ...props }: LogTabButtonProps) {
   return (
     <button
-      className={cn(
-        "rounded px-3 py-1.5 text-sm font-medium transition-colors",
-        isActive ? "bg-primary/10 text-primary" : "hover:bg-muted/50",
-      )}
-      onClick={onclick}
+      {...props}
+      className="rounded px-3 py-1.5 text-sm font-medium transition-colors aria-selected:bg-primary/10 aria-selected:text-primary hover:not-aria-selected:bg-muted/50"
       type="button"
     >
       {name}

@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
 
+import { getConnectionStatusText } from "../_utilities/get-connection-status-text";
+
 export type ConnectionStatus =
   | "connecting"
   | "connected"
@@ -17,25 +19,6 @@ export function ConnectionStatusIndicator({
   maxReconnectAttempts,
   reconnectAttempts,
 }: ConnectionStatusIndicatorProps) {
-  function renderStatusText() {
-    switch (connectionStatus) {
-      case "connected": {
-        return "Connected";
-      }
-      case "connecting": {
-        return reconnectAttempts > 0
-          ? `Reconnecting... (${reconnectAttempts.toString()}/${maxReconnectAttempts.toString()})`
-          : "Connecting...";
-      }
-      case "disconnected": {
-        return "Disconnected";
-      }
-      case "error": {
-        return "Connection Error";
-      }
-    }
-  }
-
   return (
     <div className="flex items-center gap-2">
       <div
@@ -48,7 +31,11 @@ export function ConnectionStatusIndicator({
         )}
       />
       <span className="text-muted-foreground text-sm">
-        {renderStatusText()}
+        {getConnectionStatusText(
+          connectionStatus,
+          reconnectAttempts,
+          maxReconnectAttempts,
+        )}
       </span>
     </div>
   );

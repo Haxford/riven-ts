@@ -24,3 +24,21 @@ export const Text = meta.story({
     }),
   ],
 });
+
+export const Password = meta.story({
+  args: {
+    type: "password",
+    config: {
+      name: "api-key",
+      label: "API Key",
+      type: "file",
+    },
+  },
+  decorators: [
+    createFormDecorator({
+      defaultValues: {
+        "api-key": "1234567890",
+      },
+    }),
+  ],
+});

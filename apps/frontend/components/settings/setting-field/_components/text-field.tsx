@@ -7,7 +7,7 @@ import { useFormContext } from "react-hook-form";
 import type { ComponentProps } from "react";
 import type { RegisterOptions } from "react-hook-form";
 
-export interface SettingsTextField extends Omit<
+export interface SettingsTextFieldProps extends Omit<
   ComponentProps<"input">,
   keyof RegisterOptions | "type"
 > {
@@ -21,9 +21,8 @@ export function SettingsTextField({
   name,
   label,
   description,
-
   ...props
-}: SettingsTextField) {
+}: SettingsTextFieldProps) {
   const id = useId();
 
   const { register } = useFormContext();

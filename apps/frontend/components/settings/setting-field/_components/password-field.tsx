@@ -10,7 +10,7 @@ import { useFormContext } from "react-hook-form";
 import type { ComponentProps } from "react";
 import type { RegisterOptions } from "react-hook-form";
 
-export interface SettingsPasswordField extends Omit<
+export interface SettingsPasswordFieldProps extends Omit<
   ComponentProps<"input">,
   keyof RegisterOptions | "type"
 > {
@@ -25,7 +25,7 @@ export function SettingsPasswordField({
   label,
   description,
   ...props
-}: SettingsPasswordField) {
+}: SettingsPasswordFieldProps) {
   const id = useId();
 
   const { register } = useFormContext();

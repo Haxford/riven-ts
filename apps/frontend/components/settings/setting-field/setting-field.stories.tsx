@@ -6,7 +6,6 @@ import { SettingField } from "./setting-field";
 const meta = preview.meta({
   title: "Settings / SettingField",
   component: SettingField,
-  decorators: [createFormDecorator({ progressive: true })],
 });
 
 export const Text = meta.story({
@@ -15,9 +14,9 @@ export const Text = meta.story({
     config: {
       name: "instance-name",
       label: "Instance Name",
-      defaultValue: "My Riven Instance",
     },
   },
+  decorators: [createFormDecorator({ progressive: true })],
 });
 
 export const Password = meta.story({
@@ -26,10 +25,16 @@ export const Password = meta.story({
     config: {
       name: "api-key",
       label: "API Key",
-      defaultValue: "1234567890",
-      type: "file",
     },
   },
+  decorators: [
+    createFormDecorator({
+      progressive: true,
+      defaultValues: {
+        "api-key": "1234567890",
+      },
+    }),
+  ],
 });
 
 export const Number = meta.story({
@@ -38,8 +43,47 @@ export const Number = meta.story({
     config: {
       name: "max-workers",
       label: "Max Workers",
-      defaultValue: 1,
       registerOptions: { min: 0 },
     },
   },
+  decorators: [
+    createFormDecorator({
+      progressive: true,
+      defaultValues: { "max-workers": 1 },
+    }),
+  ],
+});
+
+export const Boolean = meta.story({
+  args: {
+    type: "boolean",
+    config: {
+      name: "enable-notifications",
+      label: "Enable Notifications",
+    },
+  },
+  decorators: [
+    createFormDecorator({
+      progressive: true,
+      defaultValues: { "enable-notifications": true },
+    }),
+  ],
+});
+
+export const NullableBoolean = meta.story({
+  args: {
+    type: "nullable_boolean",
+    config: {
+      name: "auto-scrape",
+      label: "Auto Scrape",
+      trueLabel: "Always",
+      falseLabel: "Never",
+    },
+  },
+  decorators: [
+    createFormDecorator({
+      progressive: true,
+      defaultValues: { "auto-scrape": null },
+    }),
+  ],
 });

@@ -7,7 +7,7 @@ import { useFormContext } from "react-hook-form";
 import type { ComponentProps } from "react";
 import type { RegisterOptions } from "react-hook-form";
 
-export interface SettingsNumberField extends Omit<
+export interface SettingsNumberFieldProps extends Omit<
   ComponentProps<"input">,
   keyof RegisterOptions | "type"
 > {
@@ -22,7 +22,7 @@ export function SettingsNumberField({
   label,
   description,
   ...props
-}: SettingsNumberField) {
+}: SettingsNumberFieldProps) {
   const id = useId();
 
   const { register } = useFormContext();

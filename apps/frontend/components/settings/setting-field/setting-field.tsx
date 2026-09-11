@@ -4,6 +4,7 @@ import { SettingsBooleanField } from "./_components/boolean-field";
 import { SettingsNullableBooleanField } from "./_components/nullable-boolean-field";
 import { SettingsNumberField } from "./_components/number-field";
 import { SettingsPasswordField } from "./_components/password-field";
+import { SettingsSelectField } from "./_components/select-field";
 import { SettingsTextField } from "./_components/text-field";
 
 import type { ComponentProps, ComponentType } from "react";
@@ -13,7 +14,8 @@ type SettingsFieldType =
   | "password"
   | "number"
   | "boolean"
-  | "nullable_boolean";
+  | "nullable_boolean"
+  | "select";
 
 const settingFieldComponents = {
   text: SettingsTextField,
@@ -21,6 +23,7 @@ const settingFieldComponents = {
   number: SettingsNumberField,
   boolean: SettingsBooleanField,
   nullable_boolean: SettingsNullableBooleanField,
+  select: SettingsSelectField,
 } as const satisfies Record<SettingsFieldType, React.ComponentType<never>>;
 
 export type SettingFieldProps = {

@@ -12,8 +12,8 @@ export const Text = meta.story({
   args: {
     type: "text",
     config: {
-      name: "instance-name",
       label: "Instance Name",
+      name: "instance-name",
     },
   },
   decorators: [createFormDecorator({ progressive: true })],
@@ -23,8 +23,8 @@ export const Password = meta.story({
   args: {
     type: "password",
     config: {
-      name: "api-key",
       label: "API Key",
+      name: "api-key",
     },
   },
   decorators: [
@@ -41,8 +41,8 @@ export const Number = meta.story({
   args: {
     type: "number",
     config: {
-      name: "max-workers",
       label: "Max Workers",
+      name: "max-workers",
       registerOptions: { min: 0 },
     },
   },
@@ -58,8 +58,8 @@ export const Boolean = meta.story({
   args: {
     type: "boolean",
     config: {
-      name: "enable-notifications",
       label: "Enable Notifications",
+      name: "enable-notifications",
     },
   },
   decorators: [
@@ -74,8 +74,8 @@ export const NullableBoolean = meta.story({
   args: {
     type: "nullable_boolean",
     config: {
-      name: "auto-scrape",
       label: "Auto Scrape",
+      name: "auto-scrape",
       trueLabel: "Always",
       falseLabel: "Never",
     },
@@ -84,6 +84,28 @@ export const NullableBoolean = meta.story({
     createFormDecorator({
       progressive: true,
       defaultValues: { "auto-scrape": null },
+    }),
+  ],
+});
+
+export const Select = meta.story({
+  args: {
+    type: "select",
+    config: {
+      label: "Preferred Resolution",
+      name: "preferred-resolution",
+      options: [
+        { value: "2160p", label: "2160p" },
+        { value: "1080p", label: "1080p" },
+        { value: "720p", label: "720p" },
+        { value: "480p", label: "480p" },
+      ],
+    },
+  },
+  decorators: [
+    createFormDecorator({
+      progressive: true,
+      defaultValues: { "preferred-resolution": "1080p" },
     }),
   ],
 });

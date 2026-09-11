@@ -1,7 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-
+import { cn } from "cn";
 import { CheckIcon } from "lucide-react";
 import { Checkbox as CheckboxPrimitive } from "radix-ui";
 

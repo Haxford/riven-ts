@@ -1,7 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-
+import { cn } from "cn";
 import { createContext, useContext, useId, useMemo } from "react";
 import { Legend, ResponsiveContainer, Tooltip } from "recharts";
 

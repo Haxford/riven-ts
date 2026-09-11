@@ -1,6 +1,6 @@
 import { Button } from "@/components/_ui/button";
-import { cn } from "@/lib/utils";
 
+import { cn } from "cn";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,

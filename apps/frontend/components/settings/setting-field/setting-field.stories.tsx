@@ -109,3 +109,19 @@ export const Select = meta.story({
     }),
   ],
 });
+
+export const StringArray = meta.story({
+  args: {
+    type: "string_array",
+    config: {
+      label: "Excluded Words",
+      name: "excluded-words",
+    },
+  },
+  decorators: [
+    createFormDecorator({
+      progressive: true,
+      defaultValues: { "excluded-words": ["CAM", "TS", "WORKPRINT"] },
+    }),
+  ],
+});

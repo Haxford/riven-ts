@@ -1,6 +1,7 @@
 import { Checkbox } from "@/components/_ui/checkbox";
 import { Label } from "@/components/_ui/label";
-import { cn } from "@/lib/utils";
+
+import { cn } from "cn";
 
 import { getTypeStyle } from "../utilities/get-type-style";
 

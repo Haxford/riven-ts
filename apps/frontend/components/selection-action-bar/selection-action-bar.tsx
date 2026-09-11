@@ -1,5 +1,4 @@
-import { cn } from "@/lib/utils";
-
+import { cn } from "cn";
 import { X, LoaderCircle } from "lucide-react";
 import { ViewTransition } from "react";
 

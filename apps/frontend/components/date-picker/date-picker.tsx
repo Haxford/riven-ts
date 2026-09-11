@@ -1,5 +1,4 @@
-import { cn } from "@/lib/utils";
-
+import { cn } from "cn";
 import { CalendarIcon } from "lucide-react";
 import { DateTime } from "luxon";
 import { useFormContext, useWatch } from "react-hook-form";

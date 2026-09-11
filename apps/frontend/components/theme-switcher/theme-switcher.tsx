@@ -14,8 +14,8 @@ import {
   TooltipTrigger,
 } from "@/components/_ui/tooltip";
 import { themes } from "@/components/providers/theme-provider";
-import { cn } from "@/lib/utils";
 
+import { cn } from "cn";
 import { Check, Palette } from "lucide-react";
 import { useTheme } from "next-themes";
 

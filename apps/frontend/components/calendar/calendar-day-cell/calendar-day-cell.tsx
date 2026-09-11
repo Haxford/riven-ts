@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 
 import { DayItemsList } from "../day-items-list/day-items-list";
 

@@ -1,5 +1,4 @@
-import { cn } from "@/lib/utils";
-
+import { cn } from "cn";
 import { kebabCase } from "es-toolkit";
 
 import type { ReactNode } from "react";

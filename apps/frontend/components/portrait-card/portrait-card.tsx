@@ -1,5 +1,4 @@
-import { cn } from "@/lib/utils";
-
+import { cn } from "cn";
 import { Check, Mountain } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";

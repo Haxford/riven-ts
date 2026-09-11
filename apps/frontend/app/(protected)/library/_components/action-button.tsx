@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/_ui/button";
-import { cn } from "@/lib/utils";
 
+import { cn } from "cn";
 import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 
@@ -49,6 +49,7 @@ export function ActionButton({
           ? "hover:bg-red-500/20 hover:text-red-400"
           : "hover:bg-white/10",
       )}
+      type="button"
     >
       {actionInProgress ? (
         <LoaderCircle className="h-3.5 w-3.5 animate-spin" />

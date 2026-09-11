@@ -1,5 +1,4 @@
-import { cn } from "@/lib/utils";
-
+import { cn } from "cn";
 import Link from "next/link";
 import { useMemo } from "react";
 

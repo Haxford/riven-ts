@@ -3,8 +3,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/_ui/popover";
-import { cn } from "@/lib/utils";
 
+import { cn } from "cn";
 import { Bell, BellRing, Check, CheckCheck, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 

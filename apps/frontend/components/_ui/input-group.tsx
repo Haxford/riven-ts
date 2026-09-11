@@ -3,9 +3,9 @@
 import { Button } from "@/components/_ui/button";
 import { Input } from "@/components/_ui/input";
 import { Textarea } from "@/components/_ui/textarea";
-import { cn } from "@/lib/utils";
 
 import { cva } from "class-variance-authority";
+import { cn } from "cn";
 
 import type { VariantProps } from "class-variance-authority";
 

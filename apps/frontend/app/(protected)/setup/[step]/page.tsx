@@ -8,8 +8,8 @@ import {
   CardHeader,
 } from "@/components/_ui/card";
 import { Separator } from "@/components/_ui/separator";
-import { cn } from "@/lib/utils";
 
+import { cn } from "cn";
 import Link from "next/link";
 import { use } from "react";
 

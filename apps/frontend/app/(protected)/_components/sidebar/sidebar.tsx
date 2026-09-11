@@ -6,8 +6,9 @@ import {
 } from "@/components/_ui/tooltip";
 import { NotificationCenter } from "@/components/notification-center/notification-center";
 import { ThemeSwitcher } from "@/components/theme-switcher/theme-switcher";
-import { cn, getInitials } from "@/lib/utils";
+import { getInitials } from "@/lib/utils";
 
+import { cn } from "cn";
 import { Mountain } from "lucide-react";
 import Link from "next/link";
 

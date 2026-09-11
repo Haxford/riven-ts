@@ -1,5 +1,4 @@
-import { cn } from "@/lib/utils";
-
+import { cn } from "cn";
 import { ChevronLeft, Menu, Search, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";

@@ -1,6 +1,6 @@
 import { Badge } from "@/components/_ui/badge";
-import { cn } from "@/lib/utils";
 
+import { cn } from "cn";
 import { startCase } from "es-toolkit";
 
 import type { MediaItemState } from "@repo/util-plugin-sdk/dto/enums/media-item-state.enum";

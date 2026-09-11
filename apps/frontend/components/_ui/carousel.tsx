@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/_ui/button";
-import { cn } from "@/lib/utils";
 
+import { cn } from "cn";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import {

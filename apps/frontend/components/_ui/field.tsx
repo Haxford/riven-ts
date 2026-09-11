@@ -2,9 +2,9 @@
 
 import { Label } from "@/components/_ui/label";
 import { Separator } from "@/components/_ui/separator";
-import { cn } from "@/lib/utils";
 
 import { cva } from "class-variance-authority";
+import { cn } from "cn";
 import { useMemo } from "react";
 
 import type { VariantProps } from "class-variance-authority";

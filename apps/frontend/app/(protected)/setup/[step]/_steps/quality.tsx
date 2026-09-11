@@ -12,7 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/_ui/card";
-import { cn } from "@/lib/utils";
+
+import { cn } from "cn";
 
 interface SetupQualityStepProps {
   profiles: unknown[];

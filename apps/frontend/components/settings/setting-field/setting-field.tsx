@@ -1,28 +1,33 @@
 import { cn } from "@/lib/utils";
 
+import { SettingsNumberField } from "./_components/number-field";
 import { SettingsPasswordField } from "./_components/password-field";
 import { SettingsTextField } from "./_components/text-field";
 
-import type { ComponentProps } from "react";
+import type { ComponentProps, ComponentType } from "react";
 
-type SettingsFieldType = "text" | "password";
+type SettingsFieldType = "text" | "password" | "number";
 
 const settingFieldComponents = {
   text: SettingsTextField,
   password: SettingsPasswordField,
+  number: SettingsNumberField,
 } as const satisfies Record<SettingsFieldType, React.ComponentType<never>>;
 
-export type SettingFieldProps<T extends SettingsFieldType = SettingsFieldType> =
-  { type: T; nested?: boolean } & {
-    config: ComponentProps<(typeof settingFieldComponents)[T]>;
-  };
+export interface SettingFieldProps<
+  T extends SettingsFieldType = SettingsFieldType,
+> {
+  nested?: boolean;
+  type: T;
+  config: ComponentProps<(typeof settingFieldComponents)[T]>;
+}
 
-export function SettingField({
+export function SettingField<T extends SettingsFieldType>({
   type,
   config,
   nested = false,
-}: SettingFieldProps) {
-  const Component = settingFieldComponents[type];
+}: SettingFieldProps<T>) {
+  const Component: ComponentType<typeof config> = settingFieldComponents[type];
 
   return (
     <div className={cn("space-y-3", !nested && "rounded-lg border p-4")}>

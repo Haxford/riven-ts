@@ -7,7 +7,7 @@ import { useFormContext } from "react-hook-form";
 import type { ComponentProps } from "react";
 import type { RegisterOptions } from "react-hook-form";
 
-export interface SettingsTextField extends Omit<
+export interface SettingsNumberField extends Omit<
   ComponentProps<"input">,
   keyof RegisterOptions | "type"
 > {
@@ -17,13 +17,12 @@ export interface SettingsTextField extends Omit<
   registerOptions?: RegisterOptions;
 }
 
-export function SettingsTextField({
+export function SettingsNumberField({
   name,
   label,
   description,
-
   ...props
-}: SettingsTextField) {
+}: SettingsNumberField) {
   const id = useId();
 
   const { register } = useFormContext();
@@ -35,7 +34,15 @@ export function SettingsTextField({
       {description && (
         <p className="text-muted-foreground text-sm">{description}</p>
       )}
-      <Input {...props} {...field} id={id} className="max-w-xl" />
+      <div className="flex max-w-xl items-center gap-2">
+        <Input
+          {...props}
+          {...field}
+          id={id}
+          className="max-w-xl"
+          type="number"
+        />
+      </div>
     </div>
   );
 }

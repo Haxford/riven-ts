@@ -6,6 +6,7 @@ import { SettingField } from "./setting-field";
 const meta = preview.meta({
   title: "Settings / SettingField",
   component: SettingField,
+  decorators: [createFormDecorator({ progressive: true })],
 });
 
 export const Text = meta.story({
@@ -14,15 +15,9 @@ export const Text = meta.story({
     config: {
       name: "instance-name",
       label: "Instance Name",
+      defaultValue: "My Riven Instance",
     },
   },
-  decorators: [
-    createFormDecorator({
-      defaultValues: {
-        "instance-name": "My Riven Instance",
-      },
-    }),
-  ],
 });
 
 export const Password = meta.story({
@@ -31,14 +26,20 @@ export const Password = meta.story({
     config: {
       name: "api-key",
       label: "API Key",
+      defaultValue: "1234567890",
       type: "file",
     },
   },
-  decorators: [
-    createFormDecorator({
-      defaultValues: {
-        "api-key": "1234567890",
-      },
-    }),
-  ],
+});
+
+export const Number = meta.story({
+  args: {
+    type: "number",
+    config: {
+      name: "max-workers",
+      label: "Max Workers",
+      defaultValue: 1,
+      registerOptions: { min: 0 },
+    },
+  },
 });

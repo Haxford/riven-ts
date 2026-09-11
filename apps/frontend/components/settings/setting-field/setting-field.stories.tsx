@@ -125,3 +125,19 @@ export const StringArray = meta.story({
     }),
   ],
 });
+
+export const CustomRank = meta.story({
+  args: {
+    type: "custom_rank",
+    config: {
+      label: "1080p",
+      name: "custom-rank",
+    },
+  },
+  decorators: [
+    createFormDecorator({
+      progressive: true,
+      defaultValues: { "custom-rank": { fetch: true, rank: 1 } },
+    }),
+  ],
+});

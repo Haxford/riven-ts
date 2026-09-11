@@ -1,6 +1,7 @@
 import { cn } from "cn";
 
 import { SettingsBooleanField } from "./_components/boolean-field";
+import { SettingsCustomRankField } from "./_components/custom-rank-field";
 import { SettingsNullableBooleanField } from "./_components/nullable-boolean-field";
 import { SettingsNumberField } from "./_components/number-field";
 import { SettingsPasswordField } from "./_components/password-field";
@@ -17,7 +18,8 @@ type SettingsFieldType =
   | "boolean"
   | "nullable_boolean"
   | "select"
-  | "string_array";
+  | "string_array"
+  | "custom_rank";
 
 const settingFieldComponents = {
   text: SettingsTextField,
@@ -27,11 +29,11 @@ const settingFieldComponents = {
   nullable_boolean: SettingsNullableBooleanField,
   select: SettingsSelectField,
   string_array: SettingsStringArrayField,
+  custom_rank: SettingsCustomRankField,
 } as const satisfies Record<SettingsFieldType, React.ComponentType<never>>;
 
-export type SettingFieldProps = {
+export type SettingFieldProps = { nested?: boolean } & {
   [T in SettingsFieldType]: {
-    nested?: boolean;
     type: T;
     config: ComponentProps<(typeof settingFieldComponents)[T]>;
   };

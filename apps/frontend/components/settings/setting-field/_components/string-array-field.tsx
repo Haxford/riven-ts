@@ -12,7 +12,7 @@ import {
 } from "@/components/_ui/combobox";
 import { Label } from "@/components/_ui/label";
 
-import { useId, useState } from "react";
+import React, { useId, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import type { Select } from "@/components/_ui/select";
@@ -99,8 +99,8 @@ export function SettingsStringArrayField({
           </ComboboxEmpty>
           <ComboboxList>
             {(item: string, index) => (
-              <>
-                <ComboboxItem key={item} value={item}>
+              <React.Fragment key={item}>
+                <ComboboxItem value={item}>
                   {item === trimmed && isNewOption ? `Add "${item}"` : item}
                 </ComboboxItem>
                 {index === items.length - 1 &&
@@ -110,7 +110,7 @@ export function SettingsStringArrayField({
                       Begin typing to add a custom value.
                     </ComboboxItem>
                   )}
-              </>
+              </React.Fragment>
             )}
           </ComboboxList>
         </ComboboxContent>

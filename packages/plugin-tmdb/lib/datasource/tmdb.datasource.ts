@@ -14,6 +14,18 @@ class TmdbAPIError extends Error {
   public override name = "TmdbAPIError";
 }
 
+/**
+ * Removes explicit `null` values from a response.
+ *
+ * The TMDB API returns `null` for fields without a value (e.g. `poster_path`), but
+ * parts of the generated schemas expect those fields to be absent instead of `null`.
+ */
+function stripNullValues<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value), (_key: string, val: unknown) =>
+    val === null ? undefined : val,
+  ) as T;
+}
+
 export class TmdbAPI extends BaseDataSource<TmdbSettings> {
   public override baseURL = "https://api.themoviedb.org/3/";
   public override serviceName = "Tmdb";
@@ -83,7 +95,7 @@ export class TmdbAPI extends BaseDataSource<TmdbSettings> {
       },
     });
 
-    return searchMovie200Schema.parse(response);
+    return searchMovie200Schema.parse(stripNullValues(response));
   }
 
   public async searchTvShows(params: {
@@ -99,6 +111,6 @@ export class TmdbAPI extends BaseDataSource<TmdbSettings> {
       },
     });
 
-    return searchTv200Schema.parse(response);
+    return searchTv200Schema.parse(stripNullValues(response));
   }
 }

@@ -62,6 +62,7 @@ it("returns parsed search results for tv shows", async ({
             first_air_date: "2023-03-23",
             original_language: "en",
             vote_average: 7.8,
+            poster_path: null,
           },
         ],
         total_pages: 1,

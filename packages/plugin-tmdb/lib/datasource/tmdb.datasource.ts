@@ -2,6 +2,8 @@ import { BaseDataSource } from "@repo/util-plugin-sdk";
 
 import { findById200Schema } from "../__generated__/zod/findByIdSchema.ts";
 import { movieDetails200Schema } from "../__generated__/zod/movieDetailsSchema.ts";
+import { searchMovie200Schema } from "../__generated__/zod/searchMovieSchema.ts";
+import { searchTv200Schema } from "../__generated__/zod/searchTvSchema.ts";
 
 import type { FindByIdQueryParams } from "../__generated__/types/FindById.ts";
 import type { TmdbSettings } from "../tmdb-settings.schema.ts";
@@ -66,5 +68,37 @@ export class TmdbAPI extends BaseDataSource<TmdbSettings> {
     const response = await this.get<unknown>(`movie/${movieId}`);
 
     return movieDetails200Schema.parse(response);
+  }
+
+  public async searchMovies(params: {
+    query: string;
+    page?: number;
+    language?: string;
+  }) {
+    const response = await this.get<unknown>("search/movie", {
+      params: {
+        query: params.query,
+        page: params.page?.toString(),
+        language: params.language,
+      },
+    });
+
+    return searchMovie200Schema.parse(response);
+  }
+
+  public async searchTvShows(params: {
+    query: string;
+    page?: number;
+    language?: string;
+  }) {
+    const response = await this.get<unknown>("search/tv", {
+      params: {
+        query: params.query,
+        page: params.page?.toString(),
+        language: params.language,
+      },
+    });
+
+    return searchTv200Schema.parse(response);
   }
 }

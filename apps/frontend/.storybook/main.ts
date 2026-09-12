@@ -1,4 +1,5 @@
 import { defineMain } from "@storybook/nextjs-vite/node";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 export default defineMain({
   addons: [
@@ -13,5 +14,21 @@ export default defineMain({
   features: {
     experimentalCodeExamples: true,
     experimentalTestSyntax: true,
+  },
+  async viteFinal(config) {
+    const { defineConfig, mergeConfig } = await import("vite");
+
+    return mergeConfig(
+      config,
+      defineConfig({
+        plugins: [
+          nodePolyfills({
+            include: [
+              "assert", // Allows the use of assert.ok in interaction tests
+            ],
+          }),
+        ],
+      }),
+    );
   },
 });

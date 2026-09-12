@@ -2,6 +2,7 @@ import { cn } from "cn";
 
 import { SettingsBooleanField } from "./_components/boolean-field";
 import { SettingsCustomRankField } from "./_components/custom-rank-field";
+import { SettingsDictionaryField } from "./_components/dictionary-field";
 import { SettingsNullableBooleanField } from "./_components/nullable-boolean-field";
 import { SettingsNumberField } from "./_components/number-field";
 import { SettingsPasswordField } from "./_components/password-field";
@@ -19,7 +20,8 @@ type SettingsFieldType =
   | "nullable_boolean"
   | "select"
   | "string_array"
-  | "custom_rank";
+  | "custom_rank"
+  | "dictionary";
 
 const settingFieldComponents = {
   text: SettingsTextField,
@@ -30,26 +32,35 @@ const settingFieldComponents = {
   select: SettingsSelectField,
   string_array: SettingsStringArrayField,
   custom_rank: SettingsCustomRankField,
+  dictionary: SettingsDictionaryField,
 } as const satisfies Record<SettingsFieldType, React.ComponentType<never>>;
 
-export type SettingFieldProps = { nested?: boolean } & {
-  [T in SettingsFieldType]: {
-    type: T;
-    config: ComponentProps<(typeof settingFieldComponents)[T]>;
-  };
-}[SettingsFieldType];
+export type SettingFieldProps = (
+  | { nested?: false; parentName?: never }
+  | { nested: true; parentName: string }
+) &
+  {
+    [T in SettingsFieldType]: {
+      type: T;
+      config: ComponentProps<(typeof settingFieldComponents)[T]>;
+    };
+  }[SettingsFieldType];
 
 export function SettingField({
   type,
   config,
   nested = false,
+  parentName,
 }: SettingFieldProps) {
+  const name =
+    nested && parentName ? `${parentName}.${config.name}` : config.name;
+
   // oxlint-disable-next-line typescript/no-explicit-any
   const Component: ComponentType<any> = settingFieldComponents[type];
 
   return (
     <div className={cn("space-y-3", !nested && "rounded-lg border p-4")}>
-      <Component {...config} />
+      <Component {...config} name={name} />
     </div>
   );
 }

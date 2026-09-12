@@ -25,7 +25,9 @@ export function SettingsBooleanField({
 }: SettingsBooleanFieldProps) {
   const id = useId();
 
-  const { register, getValues } = useFormContext<{ [name]: boolean }>();
+  const { register, getValues, setValue } = useFormContext<{
+    [name]: boolean;
+  }>();
   const defaultValue = useMemo(() => getValues(name), [getValues, name]);
   const field = register(name, props.registerOptions);
 
@@ -39,7 +41,15 @@ export function SettingsBooleanField({
           <p className="text-muted-foreground text-sm">{description}</p>
         )}
       </div>
-      <Switch {...props} {...field} id={id} defaultChecked={defaultValue} />
+      <Switch
+        {...props}
+        {...field}
+        id={id}
+        defaultChecked={defaultValue}
+        onCheckedChange={(checked) => {
+          setValue(name, checked);
+        }}
+      />
     </div>
   );
 }

@@ -15,9 +15,29 @@ import mswAddon from "msw-storybook-addon";
 import { setupWorker } from "msw/browser";
 import { useLayoutEffect } from "react";
 import { toast } from "sonner";
+import { expect } from "storybook/test";
 import { themes } from "storybook/theming";
 
 import { WithI18n } from "./decorators/with-i18n";
+
+declare module "storybook/test" {
+  interface Expect {
+    assert: (value: unknown, message?: string) => asserts value;
+    fail: (message?: string) => never;
+  }
+}
+
+Object.assign(expect, {
+  assert: (value: unknown): asserts value => {
+    if (!value) {
+      expect(value)
+        .toBeDefined()
+        .catch(() => {
+          /* empty */
+        });
+    }
+  },
+});
 
 declare module "storybook/internal/csf" {
   interface StoryContext {

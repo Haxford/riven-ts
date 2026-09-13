@@ -20,12 +20,19 @@ class TmdbAPIError extends Error {
  * Only the fields exposed by this plugin are parsed.
  *
  * The generated TV series details schema rejects real TMDB payloads (e.g. it
- * expects season vote averages to be integers).
+ * expects season vote averages to be integers), and the generated external
+ * IDs schema defaults `tvdb_id` to `0`, which would hide shows that are not
+ * known to TVDB.
  */
 const TvSeriesDetailsSchema = z.object({
   id: z.number(),
   name: z.string().nullish(),
   number_of_seasons: z.number().nullish(),
+});
+
+const TvSeriesExternalIdsSchema = z.object({
+  id: z.number(),
+  tvdb_id: z.number().nullish(),
 });
 
 /**
@@ -100,6 +107,12 @@ export class TmdbAPI extends BaseDataSource<TmdbSettings> {
     const response = await this.get<unknown>(`tv/${seriesId}`);
 
     return TvSeriesDetailsSchema.parse(response);
+  }
+
+  public async getTvSeriesExternalIds(seriesId: string) {
+    const response = await this.get<unknown>(`tv/${seriesId}/external_ids`);
+
+    return TvSeriesExternalIdsSchema.parse(response);
   }
 
   public async searchMovies(params: {

@@ -38,3 +38,37 @@ it("returns undefined season count when it is missing", async ({
 
   expect(details.number_of_seasons).toBeUndefined();
 });
+
+it("returns the tvdb id from the external ids endpoint", async ({
+  server,
+  dataSourceMap,
+}) => {
+  server.use(
+    http.get("**/tv/95842/external_ids", () =>
+      HttpResponse.json({ id: 95_842, tvdb_id: 361_755 }),
+    ),
+  );
+
+  const tmdbApi = dataSourceMap.get(TmdbAPI);
+
+  const externalIds = await tmdbApi.getTvSeriesExternalIds("95842");
+
+  expect(externalIds.tvdb_id).toBe(361_755);
+});
+
+it("returns no tvdb id when it is not known", async ({
+  server,
+  dataSourceMap,
+}) => {
+  server.use(
+    http.get("**/tv/95842/external_ids", () =>
+      HttpResponse.json({ id: 95_842, tvdb_id: null }),
+    ),
+  );
+
+  const tmdbApi = dataSourceMap.get(TmdbAPI);
+
+  const externalIds = await tmdbApi.getTvSeriesExternalIds("95842");
+
+  expect(externalIds.tvdb_id).toBeNull();
+});

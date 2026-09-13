@@ -82,12 +82,16 @@ export class TmdbResolver {
     @Arg("id", () => Int) id: number,
     @PluginDataSource(pluginConfig.name, TmdbAPI) api: TmdbAPI,
   ): Promise<TmdbShowDetails> {
-    const details = await api.getTvSeriesDetails(id.toString());
+    const [details, externalIds] = await Promise.all([
+      api.getTvSeriesDetails(id.toString()),
+      api.getTvSeriesExternalIds(id.toString()),
+    ]);
 
     return {
       id: details.id,
       name: details.name ?? null,
       numberOfSeasons: details.number_of_seasons ?? 0,
+      tvdbId: externalIds.tvdb_id?.toString() ?? null,
     };
   }
 }

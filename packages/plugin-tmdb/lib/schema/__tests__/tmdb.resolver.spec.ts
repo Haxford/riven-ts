@@ -121,6 +121,9 @@ it('returns show details when calling "tmdbShowDetails" query', async ({
         number_of_seasons: 2,
       }),
     ),
+    http.get("**/tv/95842/external_ids", () =>
+      HttpResponse.json({ id: 95_842, tvdb_id: 361_755 }),
+    ),
   );
 
   const { body } = await gqlServer.executeOperation(
@@ -131,6 +134,7 @@ it('returns show details when calling "tmdbShowDetails" query', async ({
             id
             name
             numberOfSeasons
+            tvdbId
           }
         }
       `,
@@ -145,5 +149,6 @@ it('returns show details when calling "tmdbShowDetails" query', async ({
     id: 95_842,
     name: "Silo",
     numberOfSeasons: 2,
+    tvdbId: "361755",
   });
 });

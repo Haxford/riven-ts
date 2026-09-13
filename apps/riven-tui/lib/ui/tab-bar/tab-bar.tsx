@@ -4,7 +4,7 @@ import { useLocation } from "react-router";
 
 import { useActionsMenuContext } from "../actions-menu/actions-menu-context.tsx";
 
-interface TabData {
+export interface TabData {
   label: string;
   isHidden?: boolean;
 }

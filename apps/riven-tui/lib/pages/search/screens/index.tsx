@@ -54,7 +54,19 @@ export function SearchScreenIndexScreen() {
 
   useInput(
     (_input, key) => {
+      if (key.downArrow) {
+        setIsSearchFocused(false);
+
+        return;
+      }
+
       if (key.escape) {
+        if (inputValue === "") {
+          void navigate(-1);
+
+          return;
+        }
+
         setIsSearchFocused(false);
       }
     },

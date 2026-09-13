@@ -17,6 +17,7 @@ export const SEARCH_TMDB: TypedDocumentNode<
       title
       overview
       releaseDate
+      posterPath
       originalLanguage
       voteAverage
     }

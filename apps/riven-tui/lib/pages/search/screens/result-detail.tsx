@@ -2,6 +2,7 @@ import { CombinedGraphQLErrors } from "@apollo/client";
 import { useApolloClient, useQuery } from "@apollo/client/react";
 import { Box, Text, useInput } from "ink";
 import Link from "ink-link";
+import Image from "ink-picture";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { z } from "zod";
@@ -13,6 +14,8 @@ import { TMDB_SHOW_DETAILS } from "../queries/tmdb-show-details.query.ts";
 const RESOLUTION_OPTIONS = ["2160p", "1080p", "720p"] as const;
 const LANGUAGE_OPTIONS = ["en", "ja", "ko", "es", "fr", "de"] as const;
 
+const TMDB_IMAGE_URL = "https://image.tmdb.org/t/p/w500";
+
 const languageRowsStart = RESOLUTION_OPTIONS.length;
 const seasonRowsStart = languageRowsStart + 1;
 
@@ -23,6 +26,7 @@ const locationStateSchema = z.object({
     title: z.string().nullish(),
     overview: z.string().nullish(),
     releaseDate: z.string().nullish(),
+    posterPath: z.string().nullish(),
     originalLanguage: z.string().nullish(),
     voteAverage: z.number().nullish(),
   }),
@@ -239,26 +243,36 @@ export function SearchResultDetailScreen() {
 
   return (
     <Box flexDirection="column" gap={1}>
-      <Box flexDirection="column">
-        <DetailRow
-          label="TMDB"
-          value={
-            <Link
-              url={`https://www.themoviedb.org/${result.mediaType}/${result.id.toString()}`}
-            >
-              <Text color="blue">{result.id.toString()}</Text>
-            </Link>
-          }
-        />
-        <DetailRow
-          label="Release"
-          value={result.releaseDate?.slice(0, 4) ?? "—"}
-        />
-        <DetailRow
-          label="Rating"
-          value={result.voteAverage?.toFixed(1) ?? "—"}
-        />
-        <DetailRow label="Language" value={result.originalLanguage ?? "—"} />
+      <Box gap={1}>
+        {result.posterPath && (
+          <Image
+            src={`${TMDB_IMAGE_URL}${result.posterPath}`}
+            alt={`Poster for ${result.title ?? result.mediaType}`}
+            height={20}
+            width={40}
+          />
+        )}
+        <Box flexDirection="column">
+          <DetailRow
+            label="TMDB"
+            value={
+              <Link
+                url={`https://www.themoviedb.org/${result.mediaType}/${result.id.toString()}`}
+              >
+                <Text color="blue">{result.id.toString()}</Text>
+              </Link>
+            }
+          />
+          <DetailRow
+            label="Release"
+            value={result.releaseDate?.slice(0, 4) ?? "—"}
+          />
+          <DetailRow
+            label="Rating"
+            value={result.voteAverage?.toFixed(1) ?? "—"}
+          />
+          <DetailRow label="Language" value={result.originalLanguage ?? "—"} />
+        </Box>
       </Box>
       {result.overview && <Text>{result.overview}</Text>}
       <Box flexDirection="column" paddingTop={1}>

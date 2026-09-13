@@ -38,7 +38,7 @@ export function SearchScreenIndexScreen() {
     };
   }, [inputValue]);
 
-  const { data, loading } = useQuery(SEARCH_TMDB, {
+  const { data, loading, error } = useQuery(SEARCH_TMDB, {
     variables: { query: debouncedQuery },
     skip: debouncedQuery.length < MIN_QUERY_LENGTH,
     fetchPolicy: "network-only",
@@ -90,6 +90,7 @@ export function SearchScreenIndexScreen() {
         />
       </Box>
       {loading && <Text dimColor>Searching…</Text>}
+      {error && <Text color="red">Search failed: {error.message}</Text>}
       <SelectList
         items={results}
         isActive={!isSearchFocused}

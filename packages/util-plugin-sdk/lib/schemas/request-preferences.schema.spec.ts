@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { RequestPreferencesSchema } from "./request-preferences.schema.ts";
 
-describe("RequestPreferencesSchema", () => {
+describe("the request preferences schema", () => {
   it("accepts preferences with only resolutions", () => {
     expect(
       RequestPreferencesSchema.safeParse({ resolutions: ["1080p"] }).success,

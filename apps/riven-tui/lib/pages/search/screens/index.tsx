@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { SelectList } from "../../../ui/select-list.tsx";
+import { useReportTextEntryFocus } from "../../../ui/text-entry.tsx";
 import { SEARCH_TMDB } from "../queries/search-tmdb.query.ts";
 
 const MIN_QUERY_LENGTH = 2;
@@ -16,6 +17,8 @@ export function SearchScreenIndexScreen() {
   const [inputValue, setInputValue] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(true);
+
+  useReportTextEntryFocus(isSearchFocused);
 
   useEffect(() => {
     const trimmedQuery = inputValue.trim();

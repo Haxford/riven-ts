@@ -15,6 +15,7 @@ export const TMDB_SHOW_DETAILS: TypedDocumentNode<
       id
       name
       numberOfSeasons
+      tvdbId
     }
   }
 `;

@@ -72,10 +72,11 @@ export function SearchResultDetailScreen() {
 
   function toggleSeason(season: number) {
     setSelectedSeasons((current) => {
-      const next = new Set(
-        current ??
-          Array.from({ length: numberOfSeasons }, (_, index) => index + 1),
-      );
+      if (current === null) {
+        return new Set([season]);
+      }
+
+      const next = new Set(current);
 
       if (next.has(season)) {
         next.delete(season);
@@ -83,12 +84,25 @@ export function SearchResultDetailScreen() {
         next.add(season);
       }
 
-      return next;
+      return next.size === 0 ? null : next;
     });
   }
 
   function submitRequest() {
     if (result === null) {
+      return;
+    }
+
+    const tvdbId =
+      result.mediaType === "show"
+        ? (showDetailsData?.tmdbShowDetails.tvdbId ?? null)
+        : null;
+
+    if (result.mediaType === "show" && tvdbId === null) {
+      setMessage(
+        "Request failed: this show is not known to TVDB, which is required to index shows.",
+      );
+
       return;
     }
 
@@ -120,6 +134,7 @@ export function SearchResultDetailScreen() {
           input: {
             type: result.mediaType,
             tmdbId: result.id.toString(),
+            ...(tvdbId !== null && { tvdbId }),
             ...(seasonsToRequest && { seasons: seasonsToRequest }),
             ...(Object.keys(preferences).length > 0 && { preferences }),
           },
@@ -306,9 +321,7 @@ export function SearchResultDetailScreen() {
                 >
                   {rowIndex === cursor ? "❯ " : "  "}
                   Season {season.toString()}
-                  {selectedSeasons === null || selectedSeasons.has(season)
-                    ? " ✓"
-                    : ""}
+                  {selectedSeasons?.has(season) ? " ✓" : ""}
                 </Text>
               );
             })}

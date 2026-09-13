@@ -10,8 +10,8 @@ export const SEARCH_TMDB: TypedDocumentNode<
   RivenTuiSearchTmdbQuery,
   RivenTuiSearchTmdbQueryVariables
 > = gql`
-  query RivenTuiSearchTmdb($query: String!, $page: Int, $language: String) {
-    tmdbSearch(query: $query, page: $page, language: $language) {
+  query RivenTuiSearchTmdb($query: String!) {
+    tmdbSearch(query: $query) {
       id
       mediaType
       title

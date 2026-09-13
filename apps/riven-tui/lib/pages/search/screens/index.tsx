@@ -82,6 +82,9 @@ export function SearchScreenIndexScreen() {
         onSelect={(result) => {
           void navigate("/search/result", { state: { result } });
         }}
+        onCancel={() => {
+          void navigate(-1);
+        }}
         emptyMessage={
           debouncedQuery.length < MIN_QUERY_LENGTH
             ? "Type to search for movies and shows."

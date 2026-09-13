@@ -121,12 +121,6 @@ export function SearchResultDetailScreen() {
       return;
     }
 
-    if (input === "r") {
-      submitRequest();
-
-      return;
-    }
-
     if (!key.return && input !== " ") {
       return;
     }

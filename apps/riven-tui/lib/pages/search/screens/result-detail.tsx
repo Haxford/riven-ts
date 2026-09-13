@@ -1,5 +1,5 @@
 import { CombinedGraphQLErrors } from "@apollo/client";
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { Box, Text, useInput } from "ink";
 import Link from "ink-link";
 import { useState } from "react";
@@ -8,9 +8,13 @@ import { z } from "zod";
 
 import { DetailRow } from "../../item-detail/components/detail-row.tsx";
 import { REQUEST_ITEM } from "../queries/request-item.mutation.ts";
+import { TMDB_SHOW_DETAILS } from "../queries/tmdb-show-details.query.ts";
 
 const RESOLUTION_OPTIONS = ["2160p", "1080p", "720p"] as const;
 const LANGUAGE_OPTIONS = ["en", "ja", "ko", "es", "fr", "de"] as const;
+
+const languageRowsStart = RESOLUTION_OPTIONS.length;
+const seasonRowsStart = languageRowsStart + 1;
 
 const locationStateSchema = z.object({
   result: z.object({
@@ -24,6 +28,14 @@ const locationStateSchema = z.object({
   }),
 });
 
+function useShowDetails(result: { id: number } | null) {
+  return useQuery(TMDB_SHOW_DETAILS, {
+    variables: { id: result?.id ?? 0 },
+    skip: result === null,
+    fetchPolicy: "network-only",
+  });
+}
+
 export function SearchResultDetailScreen() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,13 +48,49 @@ export function SearchResultDetailScreen() {
   const [selectedResolutions, setSelectedResolutions] = useState<Set<string>>(
     new Set(),
   );
+  const [selectedSeasons, setSelectedSeasons] = useState<Set<number> | null>(
+    null,
+  );
   const [language, setLanguage] = useState<string | null>(null);
   const [cursor, setCursor] = useState(0);
   const [isRequesting, setIsRequesting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
+  const isShow = result?.mediaType === "show";
+
+  const { data: showDetailsData } = useShowDetails(isShow ? result : null);
+
+  const numberOfSeasons = showDetailsData?.tmdbShowDetails.numberOfSeasons ?? 0;
+  const seasonRowCount =
+    isShow && numberOfSeasons > 0 ? numberOfSeasons + 1 : 0;
+  const requestRowIndex = seasonRowsStart + seasonRowCount;
+  const totalRows = requestRowIndex + 1;
+
+  function toggleSeason(season: number) {
+    setSelectedSeasons((current) => {
+      const next = new Set(
+        current ??
+          Array.from({ length: numberOfSeasons }, (_, index) => index + 1),
+      );
+
+      if (next.has(season)) {
+        next.delete(season);
+      } else {
+        next.add(season);
+      }
+
+      return next;
+    });
+  }
+
   function submitRequest() {
     if (result === null) {
+      return;
+    }
+
+    if (selectedSeasons?.size === 0) {
+      setMessage("Select at least one season.");
+
       return;
     }
 
@@ -56,6 +104,11 @@ export function SearchResultDetailScreen() {
       ...(language != null && { language }),
     };
 
+    const seasonsToRequest =
+      selectedSeasons == null || selectedSeasons.size === 0
+        ? undefined
+        : [...selectedSeasons].toSorted((a, b) => a - b);
+
     client
       .mutate({
         mutation: REQUEST_ITEM,
@@ -63,6 +116,7 @@ export function SearchResultDetailScreen() {
           input: {
             type: result.mediaType,
             tmdbId: result.id.toString(),
+            ...(seasonsToRequest && { seasons: seasonsToRequest }),
             ...(Object.keys(preferences).length > 0 && { preferences }),
           },
         },
@@ -114,9 +168,7 @@ export function SearchResultDetailScreen() {
     }
 
     if (key.downArrow || input.toLowerCase() === "j") {
-      setCursor((current) =>
-        Math.min(RESOLUTION_OPTIONS.length + 1, current + 1),
-      );
+      setCursor((current) => Math.min(totalRows - 1, current + 1));
 
       return;
     }
@@ -125,7 +177,7 @@ export function SearchResultDetailScreen() {
       return;
     }
 
-    if (cursor < RESOLUTION_OPTIONS.length) {
+    if (cursor < languageRowsStart) {
       const resolution = RESOLUTION_OPTIONS[cursor];
 
       if (resolution) {
@@ -145,13 +197,25 @@ export function SearchResultDetailScreen() {
       return;
     }
 
-    if (cursor === RESOLUTION_OPTIONS.length) {
+    if (cursor === languageRowsStart) {
       const currentIndex = LANGUAGE_OPTIONS.indexOf(
         language as (typeof LANGUAGE_OPTIONS)[number],
       );
       const nextLanguage = LANGUAGE_OPTIONS[currentIndex + 1];
 
       setLanguage(nextLanguage ?? null);
+
+      return;
+    }
+
+    if (seasonRowCount > 0 && cursor === seasonRowsStart) {
+      setSelectedSeasons(null);
+
+      return;
+    }
+
+    if (cursor < requestRowIndex) {
+      toggleSeason(cursor - seasonRowsStart);
 
       return;
     }
@@ -206,14 +270,38 @@ export function SearchResultDetailScreen() {
             {selectedResolutions.has(resolution) ? " ✓" : ""}
           </Text>
         ))}
-        <Text color={RESOLUTION_OPTIONS.length === cursor ? "cyan" : "white"}>
-          {RESOLUTION_OPTIONS.length === cursor ? "❯ " : "  "}
+        <Text color={languageRowsStart === cursor ? "cyan" : "white"}>
+          {languageRowsStart === cursor ? "❯ " : "  "}
           Language: {languageLabel}
         </Text>
-        <Text
-          color={RESOLUTION_OPTIONS.length + 1 === cursor ? "cyan" : "white"}
-        >
-          {RESOLUTION_OPTIONS.length + 1 === cursor ? "❯ " : "  "}
+        {seasonRowCount > 0 && (
+          <>
+            <Text dimColor>Seasons</Text>
+            <Text color={seasonRowsStart === cursor ? "cyan" : "white"}>
+              {seasonRowsStart === cursor ? "❯ " : "  "}All seasons
+              {selectedSeasons === null ? " ✓" : ""}
+            </Text>
+            {Array.from({ length: numberOfSeasons }, (_, index) => {
+              const season = index + 1;
+              const rowIndex = seasonRowsStart + 1 + index;
+
+              return (
+                <Text
+                  key={season}
+                  color={rowIndex === cursor ? "cyan" : "white"}
+                >
+                  {rowIndex === cursor ? "❯ " : "  "}
+                  Season {season.toString()}
+                  {selectedSeasons === null || selectedSeasons.has(season)
+                    ? " ✓"
+                    : ""}
+                </Text>
+              );
+            })}
+          </>
+        )}
+        <Text color={requestRowIndex === cursor ? "cyan" : "white"}>
+          {requestRowIndex === cursor ? "❯ " : "  "}
           Request
         </Text>
       </Box>

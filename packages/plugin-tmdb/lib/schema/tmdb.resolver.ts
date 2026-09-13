@@ -8,6 +8,7 @@ import {
   TmdbSearchResult,
   TmdbSearchResultType,
 } from "./types/tmdb-search-result.type.ts";
+import { TmdbShowDetails } from "./types/tmdb-show-details.type.ts";
 
 @Resolver()
 export class TmdbResolver {
@@ -74,5 +75,19 @@ export class TmdbResolver {
     return [...movieResults, ...showResults].toSorted(
       (first, second) => (second.voteAverage ?? 0) - (first.voteAverage ?? 0),
     );
+  }
+
+  @Query(() => TmdbShowDetails)
+  public async tmdbShowDetails(
+    @Arg("id", () => Int) id: number,
+    @PluginDataSource(pluginConfig.name, TmdbAPI) api: TmdbAPI,
+  ): Promise<TmdbShowDetails> {
+    const details = await api.getTvSeriesDetails(id.toString());
+
+    return {
+      id: details.id,
+      name: details.name ?? null,
+      numberOfSeasons: details.number_of_seasons ?? 0,
+    };
   }
 }

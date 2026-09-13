@@ -1,5 +1,7 @@
 import { BaseDataSource } from "@repo/util-plugin-sdk";
 
+import z from "zod";
+
 import { findById200Schema } from "../__generated__/zod/findByIdSchema.ts";
 import { movieDetails200Schema } from "../__generated__/zod/movieDetailsSchema.ts";
 import { searchMovie200Schema } from "../__generated__/zod/searchMovieSchema.ts";
@@ -13,6 +15,18 @@ import type { RateLimiterOptions } from "@repo/util-plugin-sdk";
 class TmdbAPIError extends Error {
   public override name = "TmdbAPIError";
 }
+
+/**
+ * Only the fields exposed by this plugin are parsed.
+ *
+ * The generated TV series details schema rejects real TMDB payloads (e.g. it
+ * expects season vote averages to be integers).
+ */
+const TvSeriesDetailsSchema = z.object({
+  id: z.number(),
+  name: z.string().nullish(),
+  number_of_seasons: z.number().nullish(),
+});
 
 /**
  * Removes explicit `null` values from a response.
@@ -80,6 +94,12 @@ export class TmdbAPI extends BaseDataSource<TmdbSettings> {
     const response = await this.get<unknown>(`movie/${movieId}`);
 
     return movieDetails200Schema.parse(response);
+  }
+
+  public async getTvSeriesDetails(seriesId: string) {
+    const response = await this.get<unknown>(`tv/${seriesId}`);
+
+    return TvSeriesDetailsSchema.parse(response);
   }
 
   public async searchMovies(params: {

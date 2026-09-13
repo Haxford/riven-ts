@@ -107,3 +107,43 @@ it('returns mapped search results when calling "tmdbSearch" query', async ({
     },
   ]);
 });
+
+it('returns show details when calling "tmdbShowDetails" query', async ({
+  gqlContext,
+  gqlServer,
+  server,
+}) => {
+  server.use(
+    http.get("**/tv/95842", () =>
+      HttpResponse.json({
+        id: 95_842,
+        name: "Silo",
+        number_of_seasons: 2,
+      }),
+    ),
+  );
+
+  const { body } = await gqlServer.executeOperation(
+    {
+      query: `
+        query TmdbShowDetails {
+          tmdbShowDetails(id: 95842) {
+            id
+            name
+            numberOfSeasons
+          }
+        }
+      `,
+    },
+    { contextValue: gqlContext },
+  );
+
+  assert.ok(body.kind === "single");
+
+  expect(body.singleResult.errors).toBeUndefined();
+  expect(body.singleResult.data?.["tmdbShowDetails"]).toMatchObject({
+    id: 95_842,
+    name: "Silo",
+    numberOfSeasons: 2,
+  });
+});

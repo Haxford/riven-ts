@@ -1,12 +1,18 @@
-# Media Language Bridge
+# Riven → Silo completion bridge
 
-Reports Riven request creation and completed media paths to a self-hosted Media Language Bridge. It does not alter request routing, subtitles, torrent selection, or media files.
+On Riven's `riven.media-item.download.success` event, this plugin queues a
+targeted native Silo scan for the completed media directory. When Silo indexes
+the matching TMDB or TVDB item, it marks the originating Silo request complete.
 
-Enable it by adding `media-language-bridge` to `RIVEN_SETTING__enabledPlugins`, without removing existing entries, and set:
+The plugin does not write request state directly and never exposes its Silo API
+key through GraphQL.
+
+Set:
 
 ```text
-RIVEN_PLUGIN_SETTING__REPO_PLUGIN_MEDIA_LANGUAGE_BRIDGE__bridgeUrl=http://media-language-bridge:8787
-RIVEN_PLUGIN_SETTING__REPO_PLUGIN_MEDIA_LANGUAGE_BRIDGE__bridgeToken=<bridge bearer token>
+RIVEN_PLUGIN_SETTING__REPO_PLUGIN_MEDIA_LANGUAGE_BRIDGE__siloUrl=http://192.168.0.246:8090
+RIVEN_PLUGIN_SETTING__REPO_PLUGIN_MEDIA_LANGUAGE_BRIDGE__siloApiKey=<Silo admin API key>
+RIVEN_PLUGIN_SETTING__REPO_PLUGIN_MEDIA_LANGUAGE_BRIDGE__siloMountPath=/mnt/riven
+RIVEN_PLUGIN_SETTING__REPO_PLUGIN_MEDIA_LANGUAGE_BRIDGE__moviesLibraryId=1
+RIVEN_PLUGIN_SETTING__REPO_PLUGIN_MEDIA_LANGUAGE_BRIDGE__showsLibraryId=2
 ```
-
-The bridge URL must be reachable from the Riven container. Its reported paths are in Riven's mount namespace; Silo applies the path rewrite to its own namespace.

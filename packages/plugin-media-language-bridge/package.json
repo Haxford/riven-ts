@@ -1,0 +1,28 @@
+{
+  "name": "@repo/plugin-media-language-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "production": "./dist/index.js",
+      "default": "./lib/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.lib.json"
+  },
+  "dependencies": {
+    "@repo/util-plugin-sdk": "workspace:^",
+    "type-graphql": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/core-util-typescript-config": "workspace:^",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}
